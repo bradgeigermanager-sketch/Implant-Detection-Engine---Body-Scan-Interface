@@ -1,0 +1,139 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://example.org/schema/bodyscan_telemetry.schema.json",
+  "title": "BodyScanTelemetry",
+  "type": "object",
+  "required": [
+    "scanId",
+    "subjectId",
+    "scanModality",
+    "scanRegion",
+    "timestamp",
+    "detectorOutput",
+    "context",
+    "metadata"
+  ],
+  "properties": {
+    "scanId": {
+      "type": "string",
+      "description": "Unique identifier for this scan event."
+    },
+    "subjectId": {
+      "type": "string",
+      "description": "Pseudonymous or real identifier for the scanned subject."
+    },
+    "scanModality": {
+      "type": "string",
+      "enum": ["XRAY", "MRI", "CT", "ULTRASOUND", "MILLIMETER_WAVE", "OTHER"]
+    },
+    "scanRegion": {
+      "type": "string",
+      "enum": ["HEAD", "TORSO", "ABDOMEN", "LIMBS", "FULL_BODY"]
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "detectorOutput": {
+      "type": "object",
+      "required": [
+        "foreignObjectCandidates",
+        "materialClassProbabilities",
+        "implantShapeLikelihood",
+        "anomalyDensity",
+        "signalNoiseRatio",
+        "scanQualityScore"
+      ],
+      "properties": {
+        "foreignObjectCandidates": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "location", "sizeMm", "densityClass", "shapeDescriptor"],
+            "properties": {
+              "id": { "type": "string" },
+              "location": {
+                "type": "object",
+                "required": ["x", "y", "z"],
+                "properties": {
+                  "x": { "type": "number" },
+                  "y": { "type": "number" },
+                  "z": { "type": "number" }
+                }
+              },
+              "sizeMm": { "type": "number" },
+              "densityClass": {
+                "type": "string",
+                "enum": ["LOW", "MEDIUM", "HIGH"]
+              },
+              "shapeDescriptor": { "type": "string" }
+            },
+            "additionalProperties": false
+          }
+        },
+        "materialClassProbabilities": {
+          "type": "object",
+          "required": ["metal", "ceramic", "polymer", "biological"],
+          "properties": {
+            "metal": { "type": "number", "minimum": 0, "maximum": 1 },
+            "ceramic": { "type": "number", "minimum": 0, "maximum": 1 },
+            "polymer": { "type": "number", "minimum": 0, "maximum": 1 },
+            "biological": { "type": "number", "minimum": 0, "maximum": 1 }
+          },
+          "additionalProperties": false
+        },
+        "implantShapeLikelihood": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "anomalyDensity": {
+          "type": "number",
+          "minimum": 0
+        },
+        "signalNoiseRatio": {
+          "type": "number",
+          "minimum": 0
+        },
+        "scanQualityScore": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "context": {
+      "type": "object",
+      "required": ["scanPurpose", "environmentRiskLevel", "operatorId"],
+      "properties": {
+        "scanPurpose": {
+          "type": "string",
+          "enum": ["MEDICAL", "SECURITY", "FORENSIC", "OTHER"]
+        },
+        "environmentRiskLevel": {
+          "type": "string",
+          "enum": ["LOW", "MEDIUM", "HIGH"]
+        },
+        "operatorId": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "metadata": {
+      "type": "object",
+      "required": ["deviceModel", "deviceCalibrationState", "softwareVersion"],
+      "properties": {
+        "deviceModel": { "type": "string" },
+        "deviceCalibrationState": {
+          "type": "string",
+          "enum": ["OK", "WARNING", "ERROR", "UNKNOWN"]
+        },
+        "softwareVersion": { "type": "string" }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}
