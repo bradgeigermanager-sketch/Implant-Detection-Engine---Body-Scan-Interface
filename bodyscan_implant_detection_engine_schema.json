@@ -1,0 +1,45 @@
+{
+  "telemetryType": "BodyScan",
+  "scanId": "SCAN-2026-06-24-001",
+  "subjectId": "SUBJ-12345",
+  "scanModality": "XRAY",
+  "scanRegion": "TORSO",
+  "timestamp": "2026-06-24T20:45:00",
+  "detectorOutput": {
+    "foreignObjectCandidates": [
+      {
+        "id": "FO-1",
+        "location": { "x": 12.3, "y": 4.5, "z": 7.8 },
+        "sizeMm": 18.0,
+        "densityClass": "HIGH",
+        "shapeDescriptor": "CYLINDRICAL"
+      }
+    ],
+    "materialClassProbabilities": {
+      "metal": 0.78,
+      "ceramic": 0.05,
+      "polymer": 0.10,
+      "biological": 0.07
+    },
+    "implantShapeLikelihood": 0.82
+  },
+  "channels": {
+    "ForeignObjectDensityChannel": "MEDIUM",
+    "ImplantShapeLikelihoodChannel": "LIKELY_IMPLANT",
+    "MaterialRiskChannel": "HIGH",
+    "LocationCriticalityChannel": "CRITICAL",
+    "ContextualIntentChannel": "HOSTILE_CONTEXT"
+  },
+  "engines": {
+    "ImplantDetectionEngine": {
+      "verdict": "HighRiskImplantDetected",
+      "confidence": 0.91,
+      "explanation": [
+        "High implant-shape likelihood (0.82)",
+        "High material risk (metal-dominant signature)",
+        "Critical anatomical region",
+        "Hostile operational context"
+      ]
+    }
+  }
+}
