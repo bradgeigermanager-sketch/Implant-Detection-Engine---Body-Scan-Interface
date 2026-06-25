@@ -1,0 +1,30 @@
+{
+  "scanId": "SCAN-05",
+  "subjectId": "SUBJ-005",
+  "scanModality": "XRAY",
+  "scanRegion": "FULL_BODY",
+  "timestamp": "2026-06-24T20:40:00Z",
+  "detectorOutput": {
+    "foreignObjectCandidates": [],
+    "materialClassProbabilities": {
+      "metal": 0.10,
+      "ceramic": 0.05,
+      "polymer": 0.20,
+      "biological": 0.65
+    },
+    "implantShapeLikelihood": 0.12,
+    "anomalyDensity": 0.08,
+    "signalNoiseRatio": 5.0,
+    "scanQualityScore": 0.18
+  },
+  "context": {
+    "scanPurpose": "MEDICAL",
+    "environmentRiskLevel": "LOW",
+    "operatorId": "OP-1005"
+  },
+  "metadata": {
+    "deviceModel": "XR-9000",
+    "deviceCalibrationState": "ERROR",
+    "softwareVersion": "3.2.1"
+  }
+}
