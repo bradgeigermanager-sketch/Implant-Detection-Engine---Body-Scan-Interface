@@ -1,0 +1,38 @@
+{
+  "scanId": "SCAN-03",
+  "subjectId": "SUBJ-003",
+  "scanModality": "XRAY",
+  "scanRegion": "ABDOMEN",
+  "timestamp": "2026-06-24T20:20:00Z",
+  "detectorOutput": {
+    "foreignObjectCandidates": [
+      {
+        "id": "FO-1",
+        "location": { "x": 8.2, "y": 3.1, "z": 6.7 },
+        "sizeMm": 12,
+        "densityClass": "MEDIUM",
+        "shapeDescriptor": "IRREGULAR"
+      }
+    ],
+    "materialClassProbabilities": {
+      "metal": 0.30,
+      "ceramic": 0.10,
+      "polymer": 0.40,
+      "biological": 0.20
+    },
+    "implantShapeLikelihood": 0.42,
+    "anomalyDensity": 0.33,
+    "signalNoiseRatio": 20.0,
+    "scanQualityScore": 0.65
+  },
+  "context": {
+    "scanPurpose": "SECURITY",
+    "environmentRiskLevel": "MEDIUM",
+    "operatorId": "OP-1003"
+  },
+  "metadata": {
+    "deviceModel": "XR-9000",
+    "deviceCalibrationState": "OK",
+    "softwareVersion": "3.2.1"
+  }
+}
