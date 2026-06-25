@@ -1,0 +1,43 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://example.org/schema/implant_detection_engine.schema.json",
+  "title": "ImplantDetectionEngineOutput",
+  "type": "object",
+  "required": ["verdict", "confidence", "channels", "explanation"],
+  "properties": {
+    "verdict": {
+      "type": "string",
+      "enum": [
+        "NoImplantDetected",
+        "BenignImplantDetected",
+        "SuspiciousImplantDetected",
+        "HighRiskImplantDetected"
+      ]
+    },
+    "confidence": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "channels": {
+      "$ref": "channels.schema.json"
+    },
+    "explanation": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "debug": {
+      "type": "object",
+      "description": "Optional numeric details used for tuning and audits.",
+      "properties": {
+        "shapeLikelihood": { "type": "number" },
+        "materialRiskScore": { "type": "number" },
+        "foreignObjectDensity": { "type": "number" },
+        "anomalyDensity": { "type": "number" },
+        "scanQualityScore": { "type": "number" }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}
