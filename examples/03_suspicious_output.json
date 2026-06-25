@@ -1,0 +1,24 @@
+{
+  "verdict": "SuspiciousImplantDetected",
+  "confidence": 0.74,
+  "channels": {
+    "ForeignObjectDensityChannel": "LOW",
+    "ImplantShapeLikelihoodChannel": "SUSPICIOUS",
+    "MaterialRiskChannel": "MEDIUM",
+    "LocationCriticalityChannel": "ELEVATED",
+    "ContextualIntentChannel": "MIXED_CONTEXT",
+    "ScanQualityChannel": "FAIR",
+    "AnomalyDensityChannel": "MEDIUM",
+    "KnownImplantMatchChannel": "NONE"
+  },
+  "explanation": [
+    "Non-normal shape likelihood with at least medium material risk."
+  ],
+  "debug": {
+    "shapeLikelihood": 0.42,
+    "materialRiskScore": 0.33,
+    "foreignObjectDensity": 0.04,
+    "anomalyDensity": 0.33,
+    "scanQualityScore": 0.65
+  }
+}
