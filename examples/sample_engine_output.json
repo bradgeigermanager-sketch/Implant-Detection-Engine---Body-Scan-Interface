@@ -1,0 +1,27 @@
+{
+  "verdict": "HighRiskImplantDetected",
+  "confidence": 0.91,
+  "channels": {
+    "ForeignObjectDensityChannel": "MEDIUM",
+    "ImplantShapeLikelihoodChannel": "LIKELY_IMPLANT",
+    "MaterialRiskChannel": "HIGH",
+    "LocationCriticalityChannel": "ELEVATED",
+    "ContextualIntentChannel": "HOSTILE_CONTEXT",
+    "ScanQualityChannel": "GOOD",
+    "AnomalyDensityChannel": "MEDIUM",
+    "KnownImplantMatchChannel": "UNKNOWN_PATTERN"
+  },
+  "explanation": [
+    "High implant-shape likelihood (0.82)",
+    "High material risk (metal-dominant signature)",
+    "Elevated anatomical region",
+    "Hostile operational context"
+  ],
+  "debug": {
+    "shapeLikelihood": 0.82,
+    "materialRiskScore": 0.66,
+    "foreignObjectDensity": 0.04,
+    "anomalyDensity": 0.44,
+    "scanQualityScore": 0.71
+  }
+}
