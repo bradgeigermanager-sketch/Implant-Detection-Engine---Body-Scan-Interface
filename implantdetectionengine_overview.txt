@@ -1,0 +1,204 @@
+Treating **body scans** as a first‑class telemetry source, with an **Implant Detection Engine** wired into the same simulation fabric as NGODE.
+
+Here’s a compact, CI‑OS‑style design you can drop next to your existing simulation engine.
+
+---
+
+### 1. Conceptual overview
+
+**Goal:**  
+Turn raw body‑scan data (imaging + biosignals + metadata) into **structured implant‑risk signals** that can be routed, audited, and simulated like any other engine.
+
+**Core pieces:**
+
+- **Telemetry model:** What a “body scan input” looks like.
+- **Channels:** How we slice that input into meaningful signals (e.g., foreign‑object likelihood, anomaly density).
+- **Detection engine:** How we aggregate channels into an “implant detection verdict.”
+- **Routing:** Where those signals go (roles, systems, escalation paths).
+
+---
+
+### 2. Telemetry model for body scan input
+
+Think of this as a new `telemetryType: "BodyScan"` in your existing schema.
+
+**Key fields:**
+
+- **scanId:** Unique identifier for the scan.
+- **subjectId:** Pseudonymous or real identifier for the person.
+- **scanModality:** `"XRAY" | "MRI" | "CT" | "ULTRASOUND" | "MILLIMETER_WAVE" | "OTHER"`.
+- **scanRegion:** `"HEAD" | "TORSO" | "ABDOMEN" | "LIMBS" | "FULL_BODY"`.
+- **timestamp:** ISO datetime.
+- **resolutionMetrics:** voxel size, SNR, etc.
+- **detectorOutput:**  
+  - **foreignObjectCandidates:** list with location, size, density, shape descriptors.  
+  - **materialClassProbabilities:** metal/ceramic/polymer/biological.  
+  - **implantShapeLikelihood:** probability that a candidate matches known implant geometries.
+- **operatorContext:**  
+  - **scanPurpose:** `"MEDICAL" | "SECURITY" | "FORENSIC" | "OTHER"`.  
+  - **environmentRiskLevel:** `"LOW" | "MEDIUM" | "HIGH"`.
+
+---
+
+### 3. Implant‑detection channels
+
+Define channels exactly like you did for NGODE—atomic, thresholded, simulation‑ready.
+
+#### 3.1 Foreign object density channel
+
+- **id:** `ForeignObjectDensityChannel`  
+- **sourceField:** `detectorOutput.foreignObjectCandidates`  
+- **computedMetric:** number of candidates per unit volume.
+
+**Semantics:**
+
+- **LOW:** < 0.1 candidates / liter  
+- **MEDIUM:** 0.1–1.0 candidates / liter  
+- **HIGH:** > 1.0 candidates / liter  
+
+#### 3.2 Implant shape likelihood channel
+
+- **id:** `ImplantShapeLikelihoodChannel`  
+- **sourceField:** `detectorOutput.implantShapeLikelihood`  
+- **mode:** thresholded probability.
+
+**Semantics:**
+
+- **NORMAL:** < 0.2  
+- **SUSPICIOUS:** 0.2–0.6  
+- **LIKELY_IMPLANT:** > 0.6  
+
+#### 3.3 Material risk channel
+
+- **id:** `MaterialRiskChannel`  
+- **sourceField:** `materialClassProbabilities`  
+
+Define a scalar risk score, e.g.:
+
+- **riskScore** =  
+  \( 0.8 \cdot P(\text{metal}) + 0.6 \cdot P(\text{ceramic}) + 0.3 \cdot P(\text{polymer}) \)
+
+Then:
+
+- **LOW:** riskScore < 0.2  
+- **MEDIUM:** 0.2–0.5  
+- **HIGH:** > 0.5  
+
+#### 3.4 Location criticality channel
+
+- **id:** `LocationCriticalityChannel`  
+- **sourceField:** `scanRegion` + candidate locations.
+
+Map regions to criticality:
+
+- **CRITICAL:** head, spine, cardiac region.  
+- **ELEVATED:** abdomen, major joints.  
+- **BASELINE:** limbs, peripheral soft tissue.
+
+#### 3.5 Contextual intent channel
+
+- **id:** `ContextualIntentChannel`  
+- **sourceField:** `scanPurpose`, `environmentRiskLevel`.
+
+Examples:
+
+- **BENIGN_CONTEXT:** medical + low environment risk.  
+- **MIXED_CONTEXT:** medical + high risk, or security + low risk.  
+- **HOSTILE_CONTEXT:** security/forensic + high risk.
+
+---
+
+### 4. Implant Detection Engine (verdict logic)
+
+Define an engine parallel to NGODE, e.g. `ImplantDetectionEngine`, that consumes these channels and outputs a **verdict** and **confidence**.
+
+**Verdict levels (example):**
+
+- **NoImplantDetected**  
+- **BenignImplantDetected** (e.g., pacemaker, known medical device)  
+- **SuspiciousImplantDetected**  
+- **HighRiskImplantDetected**
+
+**Example rule skeleton:**
+
+- **NoImplantDetected** if:  
+  - `ImplantShapeLikelihoodChannel` = NORMAL  
+  - `ForeignObjectDensityChannel` = LOW  
+  - `MaterialRiskChannel` = LOW  
+
+- **BenignImplantDetected** if:  
+  - `ImplantShapeLikelihoodChannel` ≥ SUSPICIOUS  
+  - AND shape/material/location match a **known medical implant profile**  
+  - AND `ContextualIntentChannel` = BENIGN_CONTEXT  
+
+- **SuspiciousImplantDetected** if:  
+  - `ImplantShapeLikelihoodChannel` ≥ SUSPICIOUS  
+  - AND `MaterialRiskChannel` ≥ MEDIUM  
+  - AND `ContextualIntentChannel` ≠ BENIGN_CONTEXT  
+
+- **HighRiskImplantDetected** if:  
+  - `ImplantShapeLikelihoodChannel` = LIKELY_IMPLANT  
+  - AND `MaterialRiskChannel` = HIGH  
+  - AND (`LocationCriticalityChannel` = CRITICAL OR `ContextualIntentChannel` = HOSTILE_CONTEXT)
+
+Each verdict gets a **confidence score** based on how many conditions are satisfied and how far above thresholds the metrics are.
+
+---
+
+### 5. Example JSON snippet (channels + engine output)
+
+Here’s a compact example of how a single body‑scan event might look in your simulation engine:
+
+```json
+{
+  "telemetryType": "BodyScan",
+  "scanId": "SCAN-2026-06-24-001",
+  "subjectId": "SUBJ-12345",
+  "scanModality": "XRAY",
+  "scanRegion": "TORSO",
+  "timestamp": "2026-06-24T20:45:00",
+  "detectorOutput": {
+    "foreignObjectCandidates": [
+      {
+        "id": "FO-1",
+        "location": { "x": 12.3, "y": 4.5, "z": 7.8 },
+        "sizeMm": 18.0,
+        "densityClass": "HIGH",
+        "shapeDescriptor": "CYLINDRICAL"
+      }
+    ],
+    "materialClassProbabilities": {
+      "metal": 0.78,
+      "ceramic": 0.05,
+      "polymer": 0.10,
+      "biological": 0.07
+    },
+    "implantShapeLikelihood": 0.82
+  },
+  "channels": {
+    "ForeignObjectDensityChannel": "MEDIUM",
+    "ImplantShapeLikelihoodChannel": "LIKELY_IMPLANT",
+    "MaterialRiskChannel": "HIGH",
+    "LocationCriticalityChannel": "CRITICAL",
+    "ContextualIntentChannel": "HOSTILE_CONTEXT"
+  },
+  "engines": {
+    "ImplantDetectionEngine": {
+      "verdict": "HighRiskImplantDetected",
+      "confidence": 0.91,
+      "explanation": [
+        "High implant-shape likelihood (0.82)",
+        "High material risk (metal-dominant signature)",
+        "Critical anatomical region",
+        "Hostile operational context"
+      ]
+    }
+  }
+}
+```
+
+---
+
+- Treat `ImplantDetectionEngine` as another **engine block** in the same simulation schema as NGODE.  
+- Route `HighRiskImplantDetected` to **security roles**, **forensic review**, or **mission‑abort logic**, just like NGODE’s catastrophic levels.  
+- Use the same **digital‑twin channels → roles → actions** patterns.
