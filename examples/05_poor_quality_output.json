@@ -1,0 +1,25 @@
+{
+  "verdict": "NoImplantDetected",
+  "confidence": 0.31,
+  "channels": {
+    "ForeignObjectDensityChannel": "LOW",
+    "ImplantShapeLikelihoodChannel": "NORMAL",
+    "MaterialRiskChannel": "LOW",
+    "LocationCriticalityChannel": "BASELINE",
+    "ContextualIntentChannel": "BENIGN_CONTEXT",
+    "ScanQualityChannel": "POOR",
+    "AnomalyDensityChannel": "LOW",
+    "KnownImplantMatchChannel": "NONE"
+  },
+  "explanation": [
+    "Low shape likelihood, material risk, object density, and anomaly density.",
+    "Scan quality is poor; confidence reduced."
+  ],
+  "debug": {
+    "shapeLikelihood": 0.12,
+    "materialRiskScore": 0.13,
+    "foreignObjectDensity": 0,
+    "anomalyDensity": 0.08,
+    "scanQualityScore": 0.18
+  }
+}
