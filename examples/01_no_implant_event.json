@@ -1,0 +1,30 @@
+{
+  "scanId": "SCAN-01",
+  "subjectId": "SUBJ-001",
+  "scanModality": "XRAY",
+  "scanRegion": "LIMBS",
+  "timestamp": "2026-06-24T20:00:00Z",
+  "detectorOutput": {
+    "foreignObjectCandidates": [],
+    "materialClassProbabilities": {
+      "metal": 0.02,
+      "ceramic": 0.01,
+      "polymer": 0.05,
+      "biological": 0.92
+    },
+    "implantShapeLikelihood": 0.05,
+    "anomalyDensity": 0.02,
+    "signalNoiseRatio": 28.0,
+    "scanQualityScore": 0.88
+  },
+  "context": {
+    "scanPurpose": "MEDICAL",
+    "environmentRiskLevel": "LOW",
+    "operatorId": "OP-1001"
+  },
+  "metadata": {
+    "deviceModel": "XR-9000",
+    "deviceCalibrationState": "OK",
+    "softwareVersion": "3.2.1"
+  }
+}
