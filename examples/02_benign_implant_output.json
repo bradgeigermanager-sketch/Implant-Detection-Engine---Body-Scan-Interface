@@ -1,0 +1,24 @@
+{
+  "verdict": "BenignImplantDetected",
+  "confidence": 0.87,
+  "channels": {
+    "ForeignObjectDensityChannel": "LOW",
+    "ImplantShapeLikelihoodChannel": "LIKELY_IMPLANT",
+    "MaterialRiskChannel": "HIGH",
+    "LocationCriticalityChannel": "ELEVATED",
+    "ContextualIntentChannel": "BENIGN_CONTEXT",
+    "ScanQualityChannel": "GOOD",
+    "AnomalyDensityChannel": "LOW",
+    "KnownImplantMatchChannel": "KNOWN_BENIGN"
+  },
+  "explanation": [
+    "Pattern matches known benign implant in benign context."
+  ],
+  "debug": {
+    "shapeLikelihood": 0.78,
+    "materialRiskScore": 0.59,
+    "foreignObjectDensity": 0.04,
+    "anomalyDensity": 0.12,
+    "scanQualityScore": 0.82
+  }
+}
