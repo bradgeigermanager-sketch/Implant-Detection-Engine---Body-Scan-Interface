@@ -1,0 +1,51 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://example.org/schema/channels.schema.json",
+  "title": "ImplantDetectionChannels",
+  "type": "object",
+  "required": [
+    "ForeignObjectDensityChannel",
+    "ImplantShapeLikelihoodChannel",
+    "MaterialRiskChannel",
+    "LocationCriticalityChannel",
+    "ContextualIntentChannel",
+    "ScanQualityChannel",
+    "AnomalyDensityChannel",
+    "KnownImplantMatchChannel"
+  ],
+  "properties": {
+    "ForeignObjectDensityChannel": {
+      "type": "string",
+      "enum": ["LOW", "MEDIUM", "HIGH"]
+    },
+    "ImplantShapeLikelihoodChannel": {
+      "type": "string",
+      "enum": ["NORMAL", "SUSPICIOUS", "LIKELY_IMPLANT"]
+    },
+    "MaterialRiskChannel": {
+      "type": "string",
+      "enum": ["LOW", "MEDIUM", "HIGH"]
+    },
+    "LocationCriticalityChannel": {
+      "type": "string",
+      "enum": ["BASELINE", "ELEVATED", "CRITICAL"]
+    },
+    "ContextualIntentChannel": {
+      "type": "string",
+      "enum": ["BENIGN_CONTEXT", "MIXED_CONTEXT", "HOSTILE_CONTEXT"]
+    },
+    "ScanQualityChannel": {
+      "type": "string",
+      "enum": ["POOR", "FAIR", "GOOD", "EXCELLENT"]
+    },
+    "AnomalyDensityChannel": {
+      "type": "string",
+      "enum": ["LOW", "MEDIUM", "HIGH"]
+    },
+    "KnownImplantMatchChannel": {
+      "type": "string",
+      "enum": ["NONE", "KNOWN_BENIGN", "UNKNOWN_PATTERN"]
+    }
+  },
+  "additionalProperties": false
+}
