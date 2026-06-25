@@ -1,0 +1,38 @@
+{
+  "scanId": "SCAN-2026-06-24-001",
+  "subjectId": "SUBJ-4451",
+  "scanModality": "XRAY",
+  "scanRegion": "TORSO",
+  "timestamp": "2026-06-24T20:45:00Z",
+  "detectorOutput": {
+    "foreignObjectCandidates": [
+      {
+        "id": "FO-1",
+        "location": { "x": 12.3, "y": 4.5, "z": 7.8 },
+        "sizeMm": 18.0,
+        "densityClass": "HIGH",
+        "shapeDescriptor": "CYLINDRICAL"
+      }
+    ],
+    "materialClassProbabilities": {
+      "metal": 0.78,
+      "ceramic": 0.05,
+      "polymer": 0.10,
+      "biological": 0.07
+    },
+    "implantShapeLikelihood": 0.82,
+    "anomalyDensity": 0.44,
+    "signalNoiseRatio": 22.5,
+    "scanQualityScore": 0.71
+  },
+  "context": {
+    "scanPurpose": "SECURITY",
+    "environmentRiskLevel": "HIGH",
+    "operatorId": "OP-9921"
+  },
+  "metadata": {
+    "deviceModel": "XR-9000",
+    "deviceCalibrationState": "OK",
+    "softwareVersion": "3.2.1"
+  }
+}
